@@ -7,12 +7,12 @@ let elementoRandom = function(lista) {
 }
 
 let calificacionRandom = function() {
-    return Math.floor(Math.random() * 101)
+    return Math.round(Math.random() * 10000) / 100;
 }
 
 let fechaRandom = function() {
     const dateInicial = new Date("2021-01-01")
-    const dateFinal = new Date("2023-06-30")
+    const dateFinal = new Date("2024-06-30")
 
     return new Date(dateInicial.getTime() + Math.random() * (dateFinal.getTime() - dateInicial.getTime()))
 }
@@ -37,9 +37,19 @@ for (let i = 0; i < N; i++) {
 
 let filtarRegistros = function(registros) {
     // Fecha actual menos seis meses:
-    const fecha = new Date()
-    fecha.setMonth(fecha.getMonth() - 6)
-    console.log(fecha)
+    const fechaMenor = new Date()
+    fechaMenor.setMonth(fechaMenor.getMonth() - 6)
 
-    
+    return registros.filter(r => r.calificacion < 60 && r.fecha > fechaMenor)
 }
+
+let mapearRegistros = function(registros) {
+    return registros.map(r => ({
+        clave: r.clave,
+        calificacion: r.calificacion,
+        fechaStr: `${r.fecha.getDate().toString().padStart(2, '0')}/${(r.fecha.getMonth() + 1).toString().padStart(2, '0')}/${r.fecha.getFullYear()}`
+    }))
+}
+
+console.log("Registros:\n", registros)
+console.log("\nRegistros con calificación menor a 60 y fecha mayor a fecha actual menos 6 meses:\n", mapearRegistros(filtarRegistros(registros)))
